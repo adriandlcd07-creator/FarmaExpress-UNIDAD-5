@@ -1,0 +1,26 @@
+﻿ID,Regla,Entrada,Resultado esperado,Tipo,Prueba (pytest),Resultado real
+CP-01,Venta de controlado exige receta o excepción (CU-01),"Controlado, 5 pzas x $150, receta vigente (5 días)","Venta registrada, total $750, stock 50→45",Éxito,test_01_venta_controlado_con_receta_valida,PASSED
+CP-02,Venta de controlado exige receta o excepción (CU-01),Controlado sin receta ni excepción,"DomainException + rollback, stock sin cambio",Error,test_02_rechazo_controlado_sin_receta_y_rollback,PASSED
+CP-03,Vigencia de receta 30 días,Receta emitida hace exactamente 30 días,Vigente,Límite,test_receta_vigente_exactamente_30_dias,PASSED
+CP-04,Vigencia de receta 30 días,Receta emitida hace 31 días,Venta rechazada (receta vencida),Error/Límite,test_receta_vencida_rechaza_venta,PASSED
+CP-05,Excepción autorizada por Responsable (CU-02),"Controlado sin receta, excepción con rol RESPONSABLE_FARMACIA",Venta registrada,Éxito,test_excepcion_autorizada_por_responsable_permite_venta,PASSED
+CP-06,Excepción autorizada por Responsable (CU-02),Excepción solicitada con rol CAJERO,AutorizacionDenegada + rollback,Error,test_excepcion_por_cajero_es_denegada,PASSED
+CP-07,Lotes vencidos/bloqueados no se venden,Venta de LOTE-VENCIDO (caducó 2026-01-01),DomainException 'bloqueado o vencido',Error,test_03_lote_vencido,PASSED
+CP-08,Lotes vencidos/bloqueados no se venden,Lote que caduca el mismo día de la venta,Rechazo (caducidad debe ser > hoy),Límite,test_lote_que_caduca_hoy_se_rechaza,PASSED
+CP-09,Stock suficiente por lote,Cantidad 51 con stock 50,"DomainException 'Stock insuficiente', stock intacto",Error,test_stock_insuficiente_no_modifica_inventario,PASSED
+CP-10,Stock suficiente por lote,Cantidad 50 con stock 50,"Venta registrada, stock = 0",Límite,test_vender_exactamente_todo_el_stock,PASSED
+CP-11,Cantidad positiva,Cantidad 0 y -1,DomainException 'mayor a cero',Error,test_cantidad_cero_o_negativa_se_rechaza,PASSED
+CP-12,Recall sanitario bloquea lotes (CU-04),Recall de LOTE-001 en S001 y S002 (S002 sin producto),"1 evento LoteBloqueado, commit",Éxito,test_recall_masivo_bloquea_en_varias_sucursales,PASSED
+CP-13,Recall sanitario bloquea lotes (CU-04),Venta de lote tras recall,Rechazo 'bloqueado o vencido',Error,test_04_recall_bloquea_ventas_posteriores,PASSED
+CP-14,Cancelación con caja abierta y reingreso (CU-03),Responsable cancela venta con caja abierta,"Estado CANCELADA, stock 45→50",Éxito,test_responsable_cancela_y_reingresa_stock,PASSED
+CP-15,Cancelación con caja abierta y reingreso (CU-03),Responsable cancela con caja cerrada,"AutorizacionDenegada, stock sin cambio",Error,test_cancelar_con_caja_cerrada_se_deniega,PASSED
+CP-16,Cajero propietario cancela solo en 24 h,Cajero dueño a las 24:00 h exactas,AutorizacionDenegada,Límite,test_cajero_dueno_a_las_24_horas_exactas_se_deniega,PASSED
+CP-17,Cajero propietario cancela solo en 24 h,Cajero dueño a las 23:59 h,"Cancelación permitida, stock reingresado",Éxito,test_cajero_dueno_dentro_de_24_horas_cancela,PASSED
+CP-18,Cancelación solo por propietario/Responsable,Otro cajero intenta cancelar,AutorizacionDenegada,Error,test_cajero_ajeno_no_puede_cancelar,PASSED
+CP-19,Cobro con tarjeta vía pasarela (mock),"Pasarela aprueba, total $750","cobrar(750.0,'TICK-001') 1 vez, stock 45",Éxito,test_pago_aprobado,PASSED
+CP-20,Cobro rechazado no confirma ni descuenta,Pasarela devuelve False,"PagoRechazado, rollback, venta no guardada, stock 50",Error,test_pago_rechazado_no_descuenta_stock_ni_confirma,PASSED
+CP-21,Pasarela no disponible,Pasarela lanza TimeoutError,PagoNoDisponible + rollback,Error,test_pago_timeout_se_traduce_y_hace_rollback,PASSED
+CP-22,Persistencia de venta (SQLite),Guardar venta y commit,Venta recuperable con total 240 y detalle,Éxito,test_repository_commit,PASSED
+CP-23,Persistencia: rollback,Guardar venta y rollback,obtener() devuelve None,Error,test_repository_rollback,PASSED
+CP-24,Unicidad de folio de ticket,Dos ventas con mismo folio,IntegrityError,Error,test_folio_ticket_duplicado_viola_unicidad,PASSED
+CP-25,Una venta no se confirma dos veces (TDD),confirmar_venta() dos veces,DomainException 'ya fue confirmada',Error,test_cannot_confirm_twice,PASSED

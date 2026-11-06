@@ -1,0 +1,13 @@
+﻿caso_id,accion,lote,cantidad,precio,controlado,dias_receta,resultado_esperado,nota
+CP01,registrar_venta,LOTE-001,2,120,0,,OK 240.00,Venta normal sin receta
+CP02,registrar_venta,LOTE-001,5,150,1,5,OK 750.00,Controlado con receta vigente
+CP03,registrar_venta,LOTE-001,1,150,1,,DomainException,Controlado sin receta
+CP04,registrar_venta,LOTE-001,0,100,0,,DomainException,Cantidad cero
+CP05,registrar_venta,LOTE-001,-3,100,0,,DomainException,Cantidad negativa
+CP06,registrar_venta,LOTE-001,40,25,0,,OK 1000.00,Venta grande dentro de stock
+CP07,registrar_venta,LOTE-001,1,0.01,0,,OK 0.01,Límite: precio mínimo
+CP08,confirmar_dos_veces,LOTE-001,1,100,0,,DomainException,Caso TDD: no confirmar dos veces
+CP09,registrar_venta,LOTE-VENCIDO,1,100,0,,DomainException,Lote vencido
+CP10,registrar_venta,LOTE-001,51,100,0,,DomainException,Stock insuficiente (stock=50)
+CP11,registrar_venta,LOTE-001,1,150,1,31,DomainException,Receta de 31 días
+CP12,registrar_venta,LOTE-001,1,150,1,30,OK 150.00,Límite: receta de exactamente 30 días
