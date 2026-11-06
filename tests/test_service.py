@@ -107,7 +107,7 @@ def test_pago_aprobado(service, repos, make_cmd):
     pasarela.cobrar.return_value = True
     svc = _con_pasarela(repos, pasarela)
     evento = svc.registrar_venta(make_cmd(pago_con_tarjeta=True), HOY)
-    assert evento.total == 751.0
+    assert evento.total == 750.0
     pasarela.cobrar.assert_called_once_with(750.0, "TICK-001")
     assert _stock(repos) == 45
 
