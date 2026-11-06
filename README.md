@@ -1,6 +1,9 @@
 # FarmaExpress · Unidad 5 — Integración, Pruebas y Calidad
 
-**Equipo 10** · Emiliano Salas Padron (2157333) · Jesus Adrian De la Cruz Dominguez (2156493) · Joel Guadalupe Taméz Olmos (2158224)
+**Equipo 10**  
+Emiliano Salas Padron (2157333) 
+Jesus Adrian De la Cruz Dominguez (2156493) 
+Joel Guadalupe Taméz Olmos (2158224)
 Profesor: Miguel Ángel Gómez Marroquín · Componentes de Lógica de Negocios · FIME · UANL
 
 Suite automatizada de pruebas sobre la lógica de negocio de FarmaExpress (venta en mostrador de medicamentos generales y controlados, lotes/caducidades, excepciones, recall y cancelación).
